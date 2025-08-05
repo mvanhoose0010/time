@@ -51,7 +51,6 @@
       min-height: 24px;
     }
 
-    /* Container for +/- buttons */
     .hour-control {
       display: flex;
       justify-content: center;
@@ -60,7 +59,6 @@
       margin-top: 5px;
     }
 
-    /* Make +/- buttons bigger and square */
     .hour-control button {
       width: 40px;
       height: 40px;
@@ -95,6 +93,15 @@
       </div>
     </label>
     <br />
+    <label>
+      Add Minutes:<br />
+      <div class="hour-control">
+        <button onclick="changeMinute(-1)">–</button>
+        <input type="number" id="addMinutes" min="0" value="0" />
+        <button onclick="changeMinute(1)">+</button>
+      </div>
+    </label>
+    <br />
     <button onclick="calculateTime()">Calculate</button>
     <div id="result"></div>
   </div>
@@ -103,13 +110,21 @@
     function changeHour(amount) {
       const input = document.getElementById("addHours");
       let current = parseInt(input.value) || 0;
-      current = Math.max(0, current + amount); // prevent negative numbers
+      current = Math.max(0, current + amount);
+      input.value = current;
+    }
+
+    function changeMinute(amount) {
+      const input = document.getElementById("addMinutes");
+      let current = parseInt(input.value) || 0;
+      current = Math.max(0, current + amount);
       input.value = current;
     }
 
     function calculateTime() {
       const milInput = document.getElementById("milTime").value.trim();
       const addHours = parseInt(document.getElementById("addHours").value);
+      const addMinutes = parseInt(document.getElementById("addMinutes").value);
 
       if (!/^\d{4}$/.test(milInput)) {
         document.getElementById("result").textContent =
@@ -125,9 +140,9 @@
         return;
       }
 
-      if (isNaN(addHours)) {
+      if (isNaN(addHours) || isNaN(addMinutes)) {
         document.getElementById("result").textContent =
-          "Please enter a valid number of hours.";
+          "Please enter valid numbers for hours and minutes.";
         return;
       }
 
@@ -137,6 +152,7 @@
       date.setSeconds(0);
 
       date.setHours(date.getHours() + addHours);
+      date.setMinutes(date.getMinutes() + addMinutes);
 
       const finalHour = date.getHours().toString().padStart(2, "0");
       const finalMinute = date.getMinutes().toString().padStart(2, "0");
@@ -147,3 +163,4 @@
   </script>
 </body>
 </html>
+
